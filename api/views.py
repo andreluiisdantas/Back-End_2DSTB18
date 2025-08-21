@@ -37,7 +37,7 @@ def detalhes_autores(request,pk):
         else:
             return Response(status = status.HTTP_400_BAD_REQUEST)
         
-    elif request.method == 'PUT': 
+    elif request.method == 'PATCH': 
         serializer = AutorSerializers(autor, data = request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
