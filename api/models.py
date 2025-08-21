@@ -26,7 +26,7 @@ class Livro(models.Model):
     titulo = models.CharField(max_length=50) 
     subtitulo = models.CharField(max_length=255)
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
-    eidtor = models.ForeignKey(Editora, on_delete=models.CASCADE)
+    editor = models.ForeignKey(Editora, on_delete=models.CASCADE)
     isbn = models.CharField(max_length=255)
     descricao = models.TextField()
     idioma = models.CharField(max_length=255, default="Português")
