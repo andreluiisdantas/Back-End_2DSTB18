@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from .models import Autor, Livro, Editora
 from .serializers import AutorSerializers, LivroSerializers, EditoraSerializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 # ==== View Autores ==== #
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def listar_autores(request):
     if request.method == 'GET':
         queryset = Autor.objects.all()
@@ -18,9 +20,10 @@ def listar_autores(request):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def detalhes_autores(request,pk):
 
     autor = Autor.objects.get(pk=pk)
@@ -35,7 +38,7 @@ def detalhes_autores(request,pk):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'PATCH': 
         serializer = AutorSerializers(autor, data = request.data, partial=True)
@@ -43,18 +46,16 @@ def detalhes_autores(request,pk):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
         autor.delete()
-        if serializer.is_valid():
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 # ==== View Autores ==== #
 
 # ==== View Editoras ==== #
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def listar_editoras(request):
     if request.method == 'GET':
         queryset = Editora.objects.all()
@@ -66,9 +67,10 @@ def listar_editoras(request):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def detalhes_editoras(request,pk):
 
     editora = Editora.objects.get(pk=pk)
@@ -83,7 +85,7 @@ def detalhes_editoras(request,pk):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'PATCH': 
         serializer = EditoraSerializers(editora, data = request.data)
@@ -91,18 +93,16 @@ def detalhes_editoras(request,pk):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
         editora.delete()
-        if serializer.is_valid():
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 # ==== View Editoras ==== #
 
 # ==== View Livros ==== #
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def listar_livros(request):
     if request.method == 'GET':
         queryset = Livro.objects.all()
@@ -114,9 +114,10 @@ def listar_livros(request):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def detalhes_livros(request,pk):
 
     livro = Livro.objects.get(pk=pk)
@@ -131,7 +132,7 @@ def detalhes_livros(request,pk):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'PATCH':
         serializer = LivroSerializers(livro, data = request.data, partial=True)
@@ -143,8 +144,5 @@ def detalhes_livros(request,pk):
         
     elif request.method == 'DELETE':
         livro.delete()
-        if serializer.is_valid():
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 # ==== View Livros ==== #             
