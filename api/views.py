@@ -101,7 +101,7 @@ def detalhes_editoras(request,pk):
         return Response(serializer.data)
     
     elif request.method == 'PUT': 
-        serializer = EditoraSerializers(editora, data = request.data, partial=True)
+        serializer = EditoraSerializers(editora, data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
@@ -109,7 +109,7 @@ def detalhes_editoras(request,pk):
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'PATCH': 
-        serializer = EditoraSerializers(editora, data = request.data)
+        serializer = EditoraSerializers(editora, data = request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status = status.HTTP_200_OK)
